@@ -322,13 +322,46 @@ erDiagram
     GENERATIONS }o--|| PROMPTS : uses
     GENERATIONS ||--o{ RETRIEVED_DOCS : cites
 
-    USERS { uuid id PK, string email, string role }
-    PROJECTS { uuid id PK, uuid user_id FK, jsonb canvas_metadata }
-    CANVAS_STATES { uuid id PK, uuid project_id FK, jsonb layer_data, int version }
-    PROMPTS { uuid id PK, text final_prompt, text negative_prompt, jsonb conversation_memory }
-    GENERATIONS { uuid id PK, uuid project_id FK, int seed, float cfg_scale, string status }
-    GENERATED_IMAGES { uuid id PK, uuid generation_id FK, string object_store_path }
-    RETRIEVED_DOCS { uuid id PK, uuid generation_id FK, string chunk_id, float similarity_score }
+    USERS {
+        uuid id PK
+        string email
+        string role
+    }
+    PROJECTS {
+        uuid id PK
+        uuid user_id FK
+        jsonb canvas_metadata
+    }
+    CANVAS_STATES {
+        uuid id PK
+        uuid project_id FK
+        jsonb layer_data
+        int version
+    }
+    PROMPTS {
+        uuid id PK
+        text final_prompt
+        text negative_prompt
+        jsonb conversation_memory
+    }
+    GENERATIONS {
+        uuid id PK
+        uuid project_id FK
+        int seed
+        float cfg_scale
+        string status
+    }
+    GENERATED_IMAGES {
+        uuid id PK
+        uuid generation_id FK
+        string object_store_path
+    }
+    RETRIEVED_DOCS {
+        uuid id PK
+        uuid generation_id FK
+        string chunk_id
+        float similarity_score
+    }
 ```
 
 **PostgreSQL** is the system of record (JSONB support for flexible layer/prompt metadata, strong full-text search). **ChromaDB** stores the RAG vector index separately. Every generation is fully traceable: sketch → prompt lineage → retrieved documents → model parameters → output image — supporting the project's audit/reproducibility requirement.
